@@ -104,7 +104,7 @@ def verify_bundle(bundle: dict, public_key_override: str = None, verbose: bool =
     Returns True if all checks pass.
     """
     commits   = bundle.get('commits', [])
-    trace_id  = bundle.get('trace_id', 'unknown')
+    trace_id  = bundle.get('trace_id') or bundle.get('metadata', {}).get('trace_id') or 'unknown'
     all_ok    = True
     sig_skipped = False
 
@@ -127,6 +127,7 @@ def verify_bundle(bundle: dict, public_key_override: str = None, verbose: bool =
         if assurance != 'L3' or not attestation:
             print(f'    {WARN} Assurance level: {assurance} — skipping signature check')
             print(f'    {DIM("(L3 signature verification requires assurance_level=L3 and client_attestation)")}\n')
+            sig_skipped = True
             continue
 
         payload  = commit.get('payload') or commit.get('context')
@@ -245,18 +246,28 @@ def verify_bundle(bundle: dict, public_key_override: str = None, verbose: bool =
     print()
 
     if all_ok and not sig_skipped:
-        print(f'  {TICK} {BOLD(GREEN("All checks passed"))}')
+        print(f'  {TICK} {BOLD(GREEN("All checks passed — L3 verified"))}')
         print()
         print(f'  {DIM("This record was signed by a customer-controlled key")}')
         print(f'  {DIM("before DarkMatter received it.")}')
         print(f'  {DIM("DarkMatter cannot forge this record.")}')
         print(f'  {DIM("Verification used only the public key — no DarkMatter dependency.")}')
     elif all_ok and sig_skipped:
-        print(f'  {TICK} {BOLD(YELLOW("Hash checks passed"))} {DIM("(signature check skipped — no public key)")}'  )
-        print()
-        print(f'  {DIM("Install cryptography and pass --public-key to verify the Ed25519 signature:")}')
-        print(f'  {DIM("  pip install cryptography")}')
-        print(f'  {DIM("  python verify_offline.py bundle.json --public-key my-signing-key.pub.pem")}')
+        has_l3 = any(c.get('assurance_level') == 'L3' for c in commits)
+        if has_l3:
+            # Some L3 commits exist but signature was skipped (no public key provided)
+            print(f'  {TICK} {BOLD(YELLOW("Hash checks passed"))} {DIM("(L3 signature check skipped — no public key)")}')
+            print()
+            print(f'  {DIM("Pass --public-key to verify the Ed25519 signature:")}')
+            print(f'  {DIM("  python verify_offline.py bundle.json --public-key my-signing-key.pub.pem")}')
+        else:
+            # All L1/L2 — hash chain verified, no signatures to check
+            print(f'  {TICK} {BOLD(GREEN("Hash chain verified"))} {DIM("(L1/L2)")}')
+            print()
+            print(f'  {DIM("The hash chain is intact — no records were altered or reordered.")}')
+            print(f'  {DIM("These commits are L1/L2 — no customer signatures present.")}')
+            print(f'  {DIM("For cryptographic non-repudiation (L3):")}')
+            print(f'  {DIM("  https://darkmatterhub.ai/docs#l3-setup")}')
     else:
         print(f'  {CROSS} {BOLD(RED("Verification failed"))}')
         print()
