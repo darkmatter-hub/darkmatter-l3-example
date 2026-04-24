@@ -1,0 +1,17 @@
+# Private keys — never commit these
+*.pem
+!*.pub.pem
+
+# Environment
+.env
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+
+# Proof bundles (generated — don't commit your real bundles)
+bundle.json
+# example_bundle.json is intentionally committed

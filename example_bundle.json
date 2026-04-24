@@ -1,0 +1,33 @@
+{
+  "trace_id": "ctx_test_example",
+  "chain_intact": true,
+  "step_count": 1,
+  "commits": [
+    {
+      "id": "ctx_test_example",
+      "assurance_level": "L3",
+      "payload": {
+        "input": "Approve refund for order #84721",
+        "output": "Refund approved: $1,240.00"
+      },
+      "metadata": {
+        "model": "claude-sonnet-4-6",
+        "decision": "refund_approved"
+      },
+      "integrity_hash": "sha256:9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08",
+      "client_attestation": {
+        "version": "dm-envelope-v1",
+        "algorithm": "Ed25519",
+        "key_id": "my-signing-key",
+        "public_key": "F1Zk2hbZLh_2K9nKcXXGRzJ9h5G1f6iYB6eMApje01U",
+        "client_timestamp": "2026-04-23T21:20:00.000Z",
+        "agent_id": "dm_agent_test123",
+        "payload_hash": "sha256:cc8447059d00142fa50edad1ab193b07c12e978aa98767d051a38707182757f4",
+        "metadata_hash": "sha256:7b71de5044f47c48e9226bd5ef082e71fd0af06d1a52fb2231120c017bae76a1",
+        "envelope_hash": "sha256:7ad61df2a7ed393df1e1ceca5a5b8413dabeb1bdc3e6c28029fefbbd18ff3e07",
+        "signature": "E8HIwAo9JbNkG-pTnfxDBO1rXOklUdxEXDzvfrnkhqIbJZsIzSU19WkoM3PlsBd1UUXqoeELIGal3yNTtOqhAg",
+        "parent_id": null
+      }
+    }
+  ]
+}
