@@ -93,7 +93,9 @@ if verify:
 if assurance != 'L3':
     print()
     print('WARNING: assurance_level is not L3.')
-    print('Check that DARKMATTER_SIGNING_MODE=customer is set in your .env')
+    print('Check that DARKMATTER_SIGNING_KEY_ID and DARKMATTER_SIGNING_KEY_PATH')
+    print('are set correctly, and that the key has been registered with:')
+    print('  darkmatter keys register --key-id <id> --public-key <key>.pub.pem')
     sys.exit(1)
 
 print()

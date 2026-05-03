@@ -30,6 +30,11 @@ import base64
 import argparse
 from pathlib import Path
 
+# Ensure UTF-8 output so Unicode box-drawing characters work on all platforms
+# (Windows cmd/PowerShell default to cp1252 which cannot encode U+2500 etc.)
+if hasattr(sys.stdout, 'reconfigure'):
+    sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+
 # ANSI colours (disabled if not a tty)
 USE_COLOR = sys.stdout.isatty()
 def _c(code, s): return f'\x1b[{code}m{s}\x1b[0m' if USE_COLOR else s

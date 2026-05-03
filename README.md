@@ -146,7 +146,7 @@ DarkMatter  L3 offline verifier
 
 ────────────────────────────────────────────────────
 
-  ✔ All checks passed
+  ✔ All checks passed — L3 verified
 
   This record was signed by a customer-controlled key
   before DarkMatter received it.
